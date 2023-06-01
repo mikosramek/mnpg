@@ -1,0 +1,23 @@
+{
+  "name": "@mikosramek/mnpg",
+  "version": "0.0.1",
+  "main": "lib/index.js",
+  "types": "lib/index.d.ts",
+  "scripts": {
+    "build": "tsc"
+  },
+  "devDependencies": {
+    "@types/lodash.get": "^4.4.7",
+    "@types/node": "^20.2.5",
+    "typescript": "^5.0.4"
+  },
+  "dependencies": {
+    "@apollo/client": "^3.7.15",
+    "apollo-cache-inmemory": "^1.6.6",
+    "apollo-client": "^2.6.10",
+    "apollo-link-prismic": "^1.1.1",
+    "axios": "^1.4.0",
+    "graphql-tag": "^2.12.6",
+    "lodash.get": "^4.4.2"
+  }
+}
