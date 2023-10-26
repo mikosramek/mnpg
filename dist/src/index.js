@@ -39,13 +39,14 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
-var InMemoryCache = require("apollo-cache-inmemory").InMemoryCache;
+var _a = require("apollo-cache-inmemory"), InMemoryCache = _a.InMemoryCache, IntrospectionFragmentMatcher = _a.IntrospectionFragmentMatcher;
 var ApolloClient = require("apollo-client").ApolloClient;
 var gql = require("graphql-tag");
 var createPrismicLink = require("apollo-link-prismic").createPrismicLink;
 var _get = require("lodash.get");
 var axios = require("axios");
 var AxiosResponse = require("axios").AxiosResponse;
+var fs = require("fs");
 var parts = require("./parts");
 var MNPG = /** @class */ (function () {
     function MNPG(repo, accessToken) {
@@ -53,23 +54,53 @@ var MNPG = /** @class */ (function () {
         this.accessToken = accessToken;
         this.fragmentMatcher = "";
     }
-    MNPG.prototype.createFragments = function (prismicRef) {
-        var URL = parts.queryFragments(this.repo);
-        axios
-            .get(URL, { Headers: { "Prismic-Ref": prismicRef } })
-            .then(console.log)
-            .catch(console.error);
-        this.fragmentMatcher = "";
-    };
-    MNPG.prototype.createClient = function () {
-        this.client = new ApolloClient({
+    MNPG.prototype.createFragments = function (filePath) {
+        var tempClient = new ApolloClient({
             link: createPrismicLink({
                 repositoryName: this.repo,
                 accessToken: this.accessToken,
-                // fetch: axios.get,
             }),
             cache: new InMemoryCache(),
         });
+        return new Promise(function (resolve, reject) {
+            tempClient
+                .query({
+                query: gql(__makeTemplateObject(["\n            ", "\n          "], ["\n            ", "\n          "]), parts.schemaQuery),
+            })
+                .then(function (response) {
+                var data = JSON.stringify(response.data, null, 2);
+                fs.writeFile(filePath, data, function (err) {
+                    if (err)
+                        return reject(err);
+                    resolve(true);
+                });
+            })
+                .catch(reject);
+        });
+    };
+    MNPG.prototype.createClient = function (introspectionQueryResultData) {
+        if (introspectionQueryResultData === void 0) { introspectionQueryResultData = null; }
+        if (introspectionQueryResultData) {
+            var fragmentMatcher = new IntrospectionFragmentMatcher({
+                introspectionQueryResultData: introspectionQueryResultData,
+            });
+            this.client = new ApolloClient({
+                link: createPrismicLink({
+                    repositoryName: this.repo,
+                    accessToken: this.accessToken,
+                }),
+                cache: new InMemoryCache({ fragmentMatcher: fragmentMatcher }),
+            });
+        }
+        else {
+            this.client = new ApolloClient({
+                link: createPrismicLink({
+                    repositoryName: this.repo,
+                    accessToken: this.accessToken,
+                }),
+                cache: new InMemoryCache(),
+            });
+        }
     };
     MNPG.prototype.entryQuery = function (firstEntriesQuery, paginatedQuery, edges) {
         var _this = this;

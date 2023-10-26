@@ -1,3 +1,4 @@
+const path = require("path");
 require("dotenv").config();
 const { MNPG: testClient } = require("../dist/src");
 
@@ -6,6 +7,9 @@ const test = async () => {
     process.env.TEST_REPO,
     process.env.TEST_REPO_ACCESS_TOKEN
   );
+
+  client.createFragments(path.resolve(__dirname, "test-schema.json"));
+
   client.createClient();
 
   const home = await client.getBasePages(`{allHomes {

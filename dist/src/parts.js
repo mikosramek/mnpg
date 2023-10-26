@@ -1,7 +1,5 @@
 "use strict";
-var queryFragments = function (repo) {
-    return "https://".concat(repo, ".prismic.io/graphql?query=%7B%0A%20%20__schema%20%7B%0A%20%20%20%20types%20%7B%0A%20%20%20%20%20%20kind%0A%20%20%20%20%20%20name%0A%20%20%20%20%20%20possibleTypes%20%7B%0A%20%20%20%20%20%20%20%20name%20%0A%20%20%20%20%20%20%7D%0A%20%20%20%20%7D%0A%20%20%7D%0A%7D");
-};
+var schemaQuery = "\n{\n  __schema {\n    types {\n      kind\n      name\n      possibleTypes {\n        name \n      }\n    }\n  }\n}\n";
 module.exports = {
-    queryFragments: queryFragments,
+    schemaQuery: schemaQuery,
 };

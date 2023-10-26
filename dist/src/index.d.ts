@@ -1,10 +1,11 @@
-declare const InMemoryCache: any;
+declare const InMemoryCache: any, IntrospectionFragmentMatcher: any;
 declare const ApolloClient: any;
 declare const gql: any;
 declare const createPrismicLink: any;
 declare const _get: any;
 declare const axios: any;
 declare const AxiosResponse: any;
+declare const fs: any;
 declare const parts: any;
 type Edges = Record<any, any>[];
 type PaginatedQuery = (id: string) => string;
@@ -14,8 +15,8 @@ declare class MNPG {
     client: typeof ApolloClient;
     fragmentMatcher: string;
     constructor(repo: string, accessToken: string);
-    createFragments(prismicRef: string): void;
-    createClient(): void;
+    createFragments(filePath: string): Promise<unknown>;
+    createClient(introspectionQueryResultData?: null): void;
     private entryQuery;
     getEntries(firstEntriesQuery: string, paginatedQuery: PaginatedQuery): Promise<unknown>;
     getBasePages(basePagesQuery: string): Promise<unknown>;

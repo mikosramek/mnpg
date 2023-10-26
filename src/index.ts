@@ -1,12 +1,16 @@
 "use strict";
 
-const { InMemoryCache } = require("apollo-cache-inmemory");
+const {
+  InMemoryCache,
+  IntrospectionFragmentMatcher,
+} = require("apollo-cache-inmemory");
 const ApolloClient = require("apollo-client").ApolloClient;
 const gql = require("graphql-tag");
 const { createPrismicLink } = require("apollo-link-prismic");
 const _get = require("lodash.get");
 const axios = require("axios");
 const { AxiosResponse } = require("axios");
+const fs = require("fs");
 
 const parts = require("./parts");
 
@@ -24,24 +28,54 @@ class MNPG {
     this.fragmentMatcher = "";
   }
 
-  createFragments(prismicRef: string) {
-    const URL = parts.queryFragments(this.repo);
-    axios
-      .get(URL, { Headers: { "Prismic-Ref": prismicRef } })
-      .then(console.log)
-      .catch(console.error);
-    this.fragmentMatcher = "";
-  }
-
-  createClient() {
-    this.client = new ApolloClient({
+  createFragments(filePath: string) {
+    const tempClient = new ApolloClient({
       link: createPrismicLink({
         repositoryName: this.repo,
         accessToken: this.accessToken,
-        // fetch: axios.get,
       }),
       cache: new InMemoryCache(),
     });
+
+    return new Promise((resolve, reject) => {
+      tempClient
+        .query({
+          query: gql`
+            ${parts.schemaQuery}
+          `,
+        })
+        .then((response: typeof AxiosResponse) => {
+          const data = JSON.stringify(response.data, null, 2);
+          fs.writeFile(filePath, data, (err: Error) => {
+            if (err) return reject(err);
+            resolve(true);
+          });
+        })
+        .catch(reject);
+    });
+  }
+
+  createClient(introspectionQueryResultData = null) {
+    if (introspectionQueryResultData) {
+      const fragmentMatcher = new IntrospectionFragmentMatcher({
+        introspectionQueryResultData,
+      });
+      this.client = new ApolloClient({
+        link: createPrismicLink({
+          repositoryName: this.repo,
+          accessToken: this.accessToken,
+        }),
+        cache: new InMemoryCache({ fragmentMatcher }),
+      });
+    } else {
+      this.client = new ApolloClient({
+        link: createPrismicLink({
+          repositoryName: this.repo,
+          accessToken: this.accessToken,
+        }),
+        cache: new InMemoryCache(),
+      });
+    }
   }
 
   private entryQuery(

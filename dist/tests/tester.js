@@ -35,19 +35,20 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
+require("dotenv").config();
 var testClient = require("../dist/src").MNPG;
 var test = function () { return __awaiter(void 0, void 0, void 0, function () {
     var client, home;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
-                client = new testClient("mikosramek", "MC5ZRzl1aFJNQUFDRUFpOWk5.77-9Xu-_ve-_ve-_ve-_vQTvv73vv71iPO-_vTnvv71QTEnvv73vv70m77-9R--_ve-_vV7vv73vv73vv73vv73vv73vv71E");
-                // client.createFragments("YK6HiRAAACUAXidw");
+                client = new testClient(process.env.TEST_REPO, process.env.TEST_REPO_ACCESS_TOKEN);
+                client.createFragments("./schema.json");
                 client.createClient();
                 return [4 /*yield*/, client.getBasePages("{allHomes {\n    edges {\n      node {\n        header_text\n      }\n    }\n  }}")];
             case 1:
                 home = _a.sent();
-                console.log(home);
+                console.log(home.allHomes.edges[0].node.header_text);
                 return [2 /*return*/];
         }
     });
