@@ -1,2 +1,2 @@
-declare const MNPG: any;
-declare const test: () => void;
+declare const testClient: any;
+declare const test: () => Promise<void>;

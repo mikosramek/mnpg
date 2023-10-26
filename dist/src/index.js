@@ -42,9 +42,10 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 var InMemoryCache = require("apollo-cache-inmemory").InMemoryCache;
 var ApolloClient = require("apollo-client").ApolloClient;
 var gql = require("graphql-tag");
-var PrismicLink = require("apollo-link-prismic").PrismicLink;
+var createPrismicLink = require("apollo-link-prismic").createPrismicLink;
 var _get = require("lodash.get");
 var axios = require("axios");
+var AxiosResponse = require("axios").AxiosResponse;
 var parts = require("./parts");
 var MNPG = /** @class */ (function () {
     function MNPG(repo, accessToken) {
@@ -57,16 +58,17 @@ var MNPG = /** @class */ (function () {
         axios
             .get(URL, { Headers: { "Prismic-Ref": prismicRef } })
             .then(console.log)
-            .error(console.error);
+            .catch(console.error);
         this.fragmentMatcher = "";
     };
     MNPG.prototype.createClient = function () {
         this.client = new ApolloClient({
-            link: PrismicLink({
-                uri: "https://".concat(this.repo, ".cdn.prismic.io/graphql"),
+            link: createPrismicLink({
+                repositoryName: this.repo,
                 accessToken: this.accessToken,
+                // fetch: axios.get,
             }),
-            cache: new InMemoryCache({ fragmentMatcher: this.fragmentMatcher }),
+            cache: new InMemoryCache(),
         });
     };
     MNPG.prototype.entryQuery = function (firstEntriesQuery, paginatedQuery, edges) {
@@ -75,7 +77,7 @@ var MNPG = /** @class */ (function () {
         return new Promise(function (resolve, reject) {
             _this.client
                 .query({
-                query: gql(templateObject_1 || (templateObject_1 = __makeTemplateObject(["\n            ", "\n          "], ["\n            ", "\n          "])), firstEntriesQuery),
+                query: gql(__makeTemplateObject(["\n            ", "\n          "], ["\n            ", "\n          "]), firstEntriesQuery),
             })
                 .then(function (response) {
                 var newEdges = _get(response, "data.allEntrys.edges", []);
@@ -119,7 +121,7 @@ var MNPG = /** @class */ (function () {
         return new Promise(function (resolve, reject) {
             _this.client
                 .query({
-                query: gql(templateObject_2 || (templateObject_2 = __makeTemplateObject(["\n            ", "\n          "], ["\n            ", "\n          "])), basePagesQuery),
+                query: gql(__makeTemplateObject(["\n            ", "\n          "], ["\n            ", "\n          "]), basePagesQuery),
             })
                 .then(function (response) {
                 resolve(response.data);
@@ -132,5 +134,3 @@ var MNPG = /** @class */ (function () {
 module.exports = {
     MNPG: MNPG,
 };
-var templateObject_1, templateObject_2;
-export {};

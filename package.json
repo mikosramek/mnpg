@@ -1,11 +1,11 @@
 {
   "name": "@mikosramek/mnpg",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "",
-  "main": "index.js",
+  "main": "dist/src/index.js",
   "scripts": {
     "test": "node ./tests/tester.ts",
-    "start": "node ./index.ts"
+    "start": "node ./src/index.ts"
   },
   "keywords": [
     "neocities"
@@ -14,6 +14,7 @@
   "license": "ISC",
   "devDependencies": {
     "@types/node": "^20.2.5",
+    "dotenv": "^16.3.1",
     "typescript": "^5.0.4"
   },
   "dependencies": {

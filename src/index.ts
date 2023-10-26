@@ -1,13 +1,12 @@
 "use strict";
 
-import { AxiosResponse } from "../node_modules/axios/index";
-
 const { InMemoryCache } = require("apollo-cache-inmemory");
 const ApolloClient = require("apollo-client").ApolloClient;
 const gql = require("graphql-tag");
-const PrismicLink = require("apollo-link-prismic").PrismicLink;
+const { createPrismicLink } = require("apollo-link-prismic");
 const _get = require("lodash.get");
 const axios = require("axios");
+const { AxiosResponse } = require("axios");
 
 const parts = require("./parts");
 
@@ -30,17 +29,18 @@ class MNPG {
     axios
       .get(URL, { Headers: { "Prismic-Ref": prismicRef } })
       .then(console.log)
-      .error(console.error);
+      .catch(console.error);
     this.fragmentMatcher = "";
   }
 
   createClient() {
     this.client = new ApolloClient({
-      link: PrismicLink({
-        uri: `https://${this.repo}.cdn.prismic.io/graphql`,
+      link: createPrismicLink({
+        repositoryName: this.repo,
         accessToken: this.accessToken,
+        // fetch: axios.get,
       }),
-      cache: new InMemoryCache({ fragmentMatcher: this.fragmentMatcher }),
+      cache: new InMemoryCache(),
     });
   }
 
@@ -56,7 +56,7 @@ class MNPG {
             ${firstEntriesQuery}
           `,
         })
-        .then((response: AxiosResponse) => {
+        .then((response: typeof AxiosResponse) => {
           const newEdges = _get(response, "data.allEntrys.edges", []) as Edges;
           edges.push(...newEdges);
           const hasNextPage = _get(
@@ -100,7 +100,7 @@ class MNPG {
             ${basePagesQuery}
           `,
         })
-        .then((response: AxiosResponse) => {
+        .then((response: typeof AxiosResponse) => {
           resolve(response.data);
         })
         .catch(reject);
