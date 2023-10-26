@@ -2,10 +2,7 @@
 
 import { AxiosResponse } from "../node_modules/axios/index";
 
-const {
-  InMemoryCache,
-  IntrospectionFragmentMatcher,
-} = require("apollo-cache-inmemory");
+const { InMemoryCache } = require("apollo-cache-inmemory");
 const ApolloClient = require("apollo-client").ApolloClient;
 const gql = require("graphql-tag");
 const PrismicLink = require("apollo-link-prismic").PrismicLink;
@@ -13,11 +10,6 @@ const _get = require("lodash.get");
 const axios = require("axios");
 
 const parts = require("./parts");
-
-// const introspectionQueryResultData = require("./schema/fragmentTypes.json");
-// const fragmentMatcher = new IntrospectionFragmentMatcher({
-//   introspectionQueryResultData,
-// });
 
 type Edges = Record<any, any>[];
 type PaginatedQuery = (id: string) => string;
