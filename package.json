@@ -1,0 +1,27 @@
+{
+  "name": "@mikosramek/mnpg",
+  "version": "1.0.1",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "node ./tests/tester.ts",
+    "start": "node ./index.ts"
+  },
+  "keywords": [
+    "neocities"
+  ],
+  "author": "mikosramek",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/node": "^20.2.5",
+    "typescript": "^5.0.4"
+  },
+  "dependencies": {
+    "apollo-cache-inmemory": "^1.6.6",
+    "apollo-client": "^2.6.10",
+    "apollo-link-prismic": "^1.1.1",
+    "axios": "^1.4.0",
+    "graphql-tag": "^2.12.6",
+    "lodash.get": "^4.4.2"
+  }
+}
