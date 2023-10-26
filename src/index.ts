@@ -81,6 +81,7 @@ class MNPG {
   private entryQuery(
     firstEntriesQuery: string,
     paginatedQuery: PaginatedQuery,
+    entryName: string,
     edges: Edges = []
   ) {
     return new Promise((resolve, reject) => {
@@ -91,11 +92,15 @@ class MNPG {
           `,
         })
         .then((response: typeof AxiosResponse) => {
-          const newEdges = _get(response, "data.allEntrys.edges", []) as Edges;
+          const newEdges = _get(
+            response,
+            `data.${entryName}.edges`,
+            []
+          ) as Edges;
           edges.push(...newEdges);
           const hasNextPage = _get(
             response,
-            "data.allEntrys.pageInfo.hasNextPage",
+            `data.${entryName}.pageInfo.hasNextPage`,
             false
           );
           const lastEntryCursor = _get(newEdges[newEdges.length - 1], "cursor");
@@ -104,6 +109,7 @@ class MNPG {
               this.entryQuery(
                 paginatedQuery(lastEntryCursor),
                 paginatedQuery,
+                entryName,
                 edges
               )
             );
@@ -115,10 +121,18 @@ class MNPG {
     });
   }
 
-  getEntries(firstEntriesQuery: string, paginatedQuery: PaginatedQuery) {
+  getEntries(
+    firstEntriesQuery: string,
+    paginatedQuery: PaginatedQuery,
+    entryName: string
+  ) {
     return new Promise(async (resolve, reject) => {
       try {
-        const edges = await this.entryQuery(firstEntriesQuery, paginatedQuery);
+        const edges = await this.entryQuery(
+          firstEntriesQuery,
+          paginatedQuery,
+          entryName
+        );
         resolve(edges);
       } catch (e) {
         reject(e);

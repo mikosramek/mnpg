@@ -8,7 +8,7 @@ const test = async () => {
     process.env.TEST_REPO_ACCESS_TOKEN
   );
 
-  client.createFragments(path.resolve(__dirname, "test-schema.json"));
+  await client.createFragments(path.resolve(__dirname, "test-schema.json"));
 
   client.createClient();
 
