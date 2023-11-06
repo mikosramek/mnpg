@@ -35,6 +35,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
+var path = require("path");
 require("dotenv").config();
 var testClient = require("../dist/src").MNPG;
 var test = function () { return __awaiter(void 0, void 0, void 0, function () {
@@ -43,10 +44,12 @@ var test = function () { return __awaiter(void 0, void 0, void 0, function () {
         switch (_a.label) {
             case 0:
                 client = new testClient(process.env.TEST_REPO, process.env.TEST_REPO_ACCESS_TOKEN);
-                client.createFragments("./schema.json");
+                return [4 /*yield*/, client.createFragments(path.resolve(__dirname, "test-schema.json"))];
+            case 1:
+                _a.sent();
                 client.createClient();
                 return [4 /*yield*/, client.getBasePages("{allHomes {\n    edges {\n      node {\n        header_text\n      }\n    }\n  }}")];
-            case 1:
+            case 2:
                 home = _a.sent();
                 console.log(home.allHomes.edges[0].node.header_text);
                 return [2 /*return*/];

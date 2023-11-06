@@ -18,6 +18,6 @@ declare class MNPG {
     createFragments(filePath: string): Promise<unknown>;
     createClient(introspectionQueryResultData?: null): void;
     private entryQuery;
-    getEntries(firstEntriesQuery: string, paginatedQuery: PaginatedQuery): Promise<unknown>;
+    getEntries(firstEntriesQuery: string, paginatedQuery: PaginatedQuery, entryName: string): Promise<unknown>;
     getBasePages(basePagesQuery: string): Promise<unknown>;
 }

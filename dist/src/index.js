@@ -102,7 +102,7 @@ var MNPG = /** @class */ (function () {
             });
         }
     };
-    MNPG.prototype.entryQuery = function (firstEntriesQuery, paginatedQuery, edges) {
+    MNPG.prototype.entryQuery = function (firstEntriesQuery, paginatedQuery, entryName, edges) {
         var _this = this;
         if (edges === void 0) { edges = []; }
         return new Promise(function (resolve, reject) {
@@ -111,12 +111,12 @@ var MNPG = /** @class */ (function () {
                 query: gql(__makeTemplateObject(["\n            ", "\n          "], ["\n            ", "\n          "]), firstEntriesQuery),
             })
                 .then(function (response) {
-                var newEdges = _get(response, "data.allEntrys.edges", []);
+                var newEdges = _get(response, "data.".concat(entryName, ".edges"), []);
                 edges.push.apply(edges, newEdges);
-                var hasNextPage = _get(response, "data.allEntrys.pageInfo.hasNextPage", false);
+                var hasNextPage = _get(response, "data.".concat(entryName, ".pageInfo.hasNextPage"), false);
                 var lastEntryCursor = _get(newEdges[newEdges.length - 1], "cursor");
                 if (hasNextPage) {
-                    resolve(_this.entryQuery(paginatedQuery(lastEntryCursor), paginatedQuery, edges));
+                    resolve(_this.entryQuery(paginatedQuery(lastEntryCursor), paginatedQuery, entryName, edges));
                 }
                 else {
                     resolve(edges);
@@ -125,7 +125,7 @@ var MNPG = /** @class */ (function () {
                 .catch(reject);
         });
     };
-    MNPG.prototype.getEntries = function (firstEntriesQuery, paginatedQuery) {
+    MNPG.prototype.getEntries = function (firstEntriesQuery, paginatedQuery, entryName) {
         var _this = this;
         return new Promise(function (resolve, reject) { return __awaiter(_this, void 0, void 0, function () {
             var edges, e_1;
@@ -133,7 +133,7 @@ var MNPG = /** @class */ (function () {
                 switch (_a.label) {
                     case 0:
                         _a.trys.push([0, 2, , 3]);
-                        return [4 /*yield*/, this.entryQuery(firstEntriesQuery, paginatedQuery)];
+                        return [4 /*yield*/, this.entryQuery(firstEntriesQuery, paginatedQuery, entryName)];
                     case 1:
                         edges = _a.sent();
                         resolve(edges);
