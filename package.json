@@ -11,7 +11,7 @@
     "neocities"
   ],
   "author": "mikosramek",
-  "license": "ISC",
+  "license": "MIT",
   "devDependencies": {
     "@types/node": "^20.2.5",
     "dotenv": "^16.3.1",
