@@ -7,8 +7,16 @@
     "test": "node ./tests/tester.ts",
     "start": "node ./src/index.ts"
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/mikosramek/mnpg"
+  },
+  "homepage": "https://github.com/mikosramek/mnpg",
   "keywords": [
-    "neocities"
+    "neocities",
+    "apollo",
+    "prismic",
+    "ssg"
   ],
   "author": "mikosramek",
   "license": "MIT",
