@@ -11,6 +11,8 @@ MNPG is an Apollo wrapper library that interfaces with [prismic](prismic.io/). I
 3. Save your prismic schema to a `.json` file
 4. Write your GraphQL queries for pages
 
+> A template repo exists [here](https://github.com/mikosramek/mnpg-template) that has more examples of usage / utility files
+
 ### Schema Getting Example
 
 This can be done through code, or through the graphql interface on Prismic's website. Having it as it's own file means that you can encorporate it into ci/cd rather than having to manually update a file.
